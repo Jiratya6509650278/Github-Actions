@@ -1,0 +1,50 @@
+name: Test Node.js CI
+
+
+on:
+  push:
+    branches:
+      - Jiratya6509650278-patch-1
+  pull_request:
+    branches:
+      - Jiratya6509650278-patch-1
+
+
+jobs:
+  test:
+  
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node-version: [18, 20, 22]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+     
+      - name: Run tests
+        run: npm test
+
+   
+    defaults:
+      run:
+        shell: bash
+
+  
+  debug:
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Debug
+        run: dmesg
