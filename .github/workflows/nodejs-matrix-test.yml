@@ -1,4 +1,4 @@
-name: Test Node.js CI
+name: Node.js CI Test
 
 
 on:
@@ -12,39 +12,29 @@ on:
 
 jobs:
   test:
-  
+    
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
-        node-version: [18, 20, 22]
+        os: [ubuntu-latest, macos-latest]  
+        node-version: [18, 20, 22]         
 
     steps:
+      
       - name: Checkout code
         uses: actions/checkout@v3
 
+      
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
+      
       - name: Install dependencies
         run: npm install
 
      
       - name: Run tests
         run: npm test
-
-   
-    defaults:
-      run:
-        shell: bash
-
-  
-  debug:
-    if: failure()
-    runs-on: ubuntu-latest
-    steps:
-      - name: Debug
-        run: dmesg
